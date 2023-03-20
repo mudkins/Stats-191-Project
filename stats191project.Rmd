@@ -1,0 +1,48 @@
+---
+title: "STATS 191 Project"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+data = read.csv('game_3_data.csv')
+par(mfrow = c(1,1))
+head(data)
+```
+
+```{r}
+data = read.csv('game_3_data.csv')
+data = data %>% mutate(dummy=1) %>%
+spread(key=coast,value=dummy, fill=0)
+data = data %>% mutate(dummy=1) %>%
+spread(key=game.scheduled,value=dummy, fill=0)
+data = data %>% mutate(dummy=1) %>%
+spread(key=early.bird.night.owl,value=dummy, fill=0)
+data = data %>% mutate(dummy=1) %>%
+spread(key=previous.competitive.sports,value=dummy, fill=0)
+data = data %>% mutate(dummy=1) %>%
+spread(key=university.year,value=dummy, fill=0)
+
+write.csv(data, 'game_3_clean.csv')
+```
+
+```{r}
+cov(data)
+data
+```
+
+```{r}
+head(data)
+par(mfrow = c(1,1))
+pairs(data[,c(2:5)])
+pairs(data[,c(2, 6:8)])
+pairs(data[,c(2, 9:10)])
+```
+
+```{r}
+model = lm(game.score ~ . -student.label , data=data)
+summary(model)
+```
+
